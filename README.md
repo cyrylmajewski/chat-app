@@ -1,1 +1,1 @@
-# Chat app (Python + React)
+# Chat app (Django Channels + React)
