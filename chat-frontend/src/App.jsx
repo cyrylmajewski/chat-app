@@ -7,15 +7,8 @@ import {
   RouterProvider,
   Route
  } from 'react-router-dom';
-import useWebSocket from 'react-use-websocket';
-import axios from 'axios';
-import { useEffect } from 'react';
-
+ 
 function App() {
-
-  // useEffect(() => {
-  //   axios.get(`${import.meta.env.VITE_SERVER_URL}/get-rooms`).then(res => console.log(res.data));
-  // }, []);
 
   const router = createBrowserRouter(
     createRoutesFromElements(
