@@ -31,7 +31,7 @@ docker run -p 6379:6379 -d redis:5
 
 **Set your SECRET_KEY in settings.py:**
 ```
-SECRET_KEY = 'YOUR_SECRET_KEY'
+SECRET_KEY='YOUR_SECRET_KEY'
 ```
 
 Run project:
