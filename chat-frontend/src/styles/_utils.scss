@@ -1,0 +1,27 @@
+@mixin transition($property: all, $duration: 0.3s, $ease: ease-in-out) {
+    transition: $property $duration $ease;
+}
+
+@mixin flex($justify: flex-start, $align: stretch, $wrap: nowrap, $dir: row, $flex: flex, $gap: 0) {
+    display: $flex;
+
+    @if $justify !=flex-start {
+        justify-content: $justify;
+    }
+
+    @if $align !=stretch {
+        align-items: $align;
+    }
+
+    @if $wrap !=nowrap {
+        flex-wrap: $wrap;
+    }
+
+    @if $dir !=row {
+        flex-direction: $dir;
+    }
+
+    @if $gap !=0 {
+        gap: $gap;
+    }
+}
