@@ -5,7 +5,7 @@
 ### Go to server folder:
 ```
 cd chat-server
-python3 -m venv venv
+python3 -m venv env
 ```
 ### Ubuntu/Mac:
 
