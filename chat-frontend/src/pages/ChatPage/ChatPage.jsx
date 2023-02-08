@@ -1,6 +1,6 @@
 import styles from './ChatPage.module.scss';
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { Input, Button } from '@mui/material';
 import clsx from 'clsx';
@@ -8,13 +8,30 @@ import useWebSocket from 'react-use-websocket';
 
 export const ChatPage = () => {
     const [messageHistory, setMessageHistory] = useState([]);
+    // const [message, setMessage] = useState('');
 
     const socketUrl = `${import.meta.env.VITE_CHAT_HOST}/ws/chat/`;
 
-    const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
+    const { sendJsonMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
         onError: () => console.log('error'),
         onOpen: () => console.log('Hello guys'),
+        shouldReconnect: (closeEvent) => true,
     });
+
+    useEffect(() => {
+        if (lastMessage !== null) {
+            setMessageHistory((prev) => prev.concat(lastMessage));
+        }
+    }, [lastMessage, setMessageHistory]);
+
+    const handleClickSendMessage = useCallback((e) => {
+        e.preventDefault();
+        const message = e.target.elements.message.value;
+
+        sendJsonMessage({ message });
+        
+        e.target.elements.message.value = '';
+    }, []);
     
     return (
         <div className={styles.ChatPage}>
@@ -38,7 +55,13 @@ export const ChatPage = () => {
                     <span className={styles.ChatPageHeaderCount}>2 people</span>
                 </div>
                 <ul className={styles.ChatPageMessages}>
-                    <li className={styles.ChatPageMessagesItem}>
+                    {messageHistory.map((message, idx) => (
+                        <li key={idx} className={styles.ChatPageMessagesItem}>
+                            <div className={styles.ChatPageMessagesImage}>JK</div>
+                            <p className={styles.ChatPageMessagesText}>{message ? JSON.parse(message.data).message : null}</p>
+                        </li>
+                    ))}
+                    {/* <li className={styles.ChatPageMessagesItem}>
                         <div className={styles.ChatPageMessagesImage}>JK</div>
                         <p className={styles.ChatPageMessagesText}>Message</p>
                     </li>
@@ -49,12 +72,12 @@ export const ChatPage = () => {
                     <li className={clsx(styles.ChatPageMessagesItem, styles.Self)}>
                         <p className={styles.ChatPageMessagesText}>Message</p>
                         <div className={styles.ChatPageMessagesImage}>JK</div>
-                    </li>
+                    </li> */}
                 </ul>
-                <div className={styles.ChatPageBottom}>
-                    <Input variant="standard" className={styles.ChatPageBottomInput} placeholder='Message' />
-                    <Button className={styles.ChatPageBottomButton} variant='contained'>Send</Button>
-                </div>
+                <form onSubmit={handleClickSendMessage} className={styles.ChatPageBottom}>
+                    <Input id="message" variant="standard" className={styles.ChatPageBottomInput} placeholder='Message' />
+                    <Button type="submit" className={styles.ChatPageBottomButton} variant='contained'>Send</Button>
+                </form>
             </div>
         </div>
     )
